@@ -9,12 +9,46 @@ export interface UploadResult {
   error?: string;
 }
 
-export function isCloudinaryConfigured(): boolean {
-  return Boolean(
+export interface CloudinaryConfig {
+  cloudName: string;
+  apiKey: string;
+  apiSecret: string;
+}
+
+export function getCloudinaryConfig(): CloudinaryConfig | null {
+  if (
     process.env.CLOUDINARY_CLOUD_NAME &&
     process.env.CLOUDINARY_API_KEY &&
     process.env.CLOUDINARY_API_SECRET
-  );
+  ) {
+    return {
+      cloudName: process.env.CLOUDINARY_CLOUD_NAME.trim(),
+      apiKey: process.env.CLOUDINARY_API_KEY.trim(),
+      apiSecret: process.env.CLOUDINARY_API_SECRET.trim(),
+    };
+  }
+
+  const urlStr = process.env.CLOUDINARY_URL?.trim();
+  if (urlStr) {
+    try {
+      // Format: cloudinary://api_key:api_secret@cloud_name
+      const parsed = new URL(urlStr);
+      const apiKey = decodeURIComponent(parsed.username);
+      const apiSecret = decodeURIComponent(parsed.password);
+      const cloudName = parsed.hostname;
+      if (apiKey && apiSecret && cloudName) {
+        return { cloudName, apiKey, apiSecret };
+      }
+    } catch {
+      // parse failed
+    }
+  }
+
+  return null;
+}
+
+export function isCloudinaryConfigured(): boolean {
+  return getCloudinaryConfig() !== null;
 }
 
 export async function uploadImage(file: File): Promise<UploadResult> {
@@ -27,11 +61,10 @@ export async function uploadImage(file: File): Promise<UploadResult> {
   const buffer = Buffer.from(bytes);
 
   // If Cloudinary is configured, use its REST API
-  if (isCloudinaryConfigured()) {
+  const cloudConfig = getCloudinaryConfig();
+  if (cloudConfig) {
     try {
-      const cloudName = process.env.CLOUDINARY_CLOUD_NAME!;
-      const apiKey = process.env.CLOUDINARY_API_KEY!;
-      const apiSecret = process.env.CLOUDINARY_API_SECRET!;
+      const { cloudName, apiKey, apiSecret } = cloudConfig;
       const timestamp = Math.floor(Date.now() / 1000);
 
       const signStr = `folder=nexus_uploads&timestamp=${timestamp}${apiSecret}`;
@@ -86,8 +119,6 @@ export async function uploadImage(file: File): Promise<UploadResult> {
     await fs.writeFile(fullPath, buffer);
     return { success: true, url: `/uploads/${filename}` };
   } catch (fsErr) {
-    // If running in a read-only serverless environment and no Cloudinary is set,
-    // fallback to a clean base64 data URL so nothing breaks.
     console.warn('[Upload] Filesystem not writable, fallback to base64 data URL:', fsErr);
     const base64 = buffer.toString('base64');
     const dataUrl = `data:${file.type};base64,${base64}`;
