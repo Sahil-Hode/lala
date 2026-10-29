@@ -15,6 +15,7 @@ declare global {
 
 let clientPromise: Promise<MongoClient> | null = null;
 let isInitialized = false;
+let lastMongoError: string | null = null;
 
 export function isMongoConfigured(): boolean {
   return Boolean(process.env.MONGODB_URI || process.env.MONGO_URI);
@@ -176,6 +177,7 @@ export async function getMongoDb(): Promise<Db | null> {
 
     return db;
   } catch (err) {
+    lastMongoError = err instanceof Error ? err.message : String(err);
     console.error('[MongoDB] Failed to connect:', err);
     return null;
   }
@@ -208,7 +210,7 @@ export async function checkMongoConnection(): Promise<{
   try {
     const db = await getMongoDb();
     if (!db) {
-      return { ok: false, configured: true, error: 'Could not connect to MongoDB database.' };
+      return { ok: false, configured: true, error: lastMongoError || 'Could not connect to MongoDB database.' };
     }
     await db.command({ ping: 1 });
     const collections = await ensureMongoCollectionsAndSeed(db);

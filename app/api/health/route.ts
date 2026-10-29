@@ -28,7 +28,9 @@ export async function GET() {
     {
       ok: isHealthy,
       database: dbCheck.ok,
+      database_type: dbCheck.type || 'none',
       database_configured: dbCheck.configured,
+      database_error: dbCheck.error || null,
       tables_ready: Boolean(hasAllTables),
       uploads: uploadsConfigured,
       timestamp: new Date().toISOString(),
