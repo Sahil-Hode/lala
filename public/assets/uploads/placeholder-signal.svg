@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#040c14"/>
+      <stop offset="100%" stop-color="#0c2838"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#g)"/>
+  <path d="M100 400 Q200 100 400 250 T700 150" fill="none" stroke="#00ffc8" stroke-width="2" opacity=".6"/>
+  <path d="M80 350 Q250 200 420 300 T720 220" fill="none" stroke="#ff3344" stroke-width="1.5" opacity=".5"/>
+  <g fill="#00ffc8">
+    <circle cx="200" cy="180" r="4"/><circle cx="400" cy="250" r="4"/><circle cx="550" cy="200" r="4"/><circle cx="700" cy="150" r="4"/>
+  </g>
+  <rect x="50" y="40" width="200" height="8" fill="#00ffc8" opacity=".3"/>
+  <rect x="50" y="60" width="140" height="4" fill="#00ffc8" opacity=".2"/>
+  <text x="50" y="460" fill="#00ffc8" font-family="monospace" font-size="18" letter-spacing="3">SIGNAL INTERCEPT ARRAY</text>
+</svg>

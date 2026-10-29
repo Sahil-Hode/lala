@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500">
+  <rect width="800" height="500" fill="#061018"/>
+  <rect x="100" y="100" width="280" height="200" fill="none" stroke="#00ffc8" stroke-width="1.5" opacity=".5"/>
+  <rect x="120" y="120" width="240" height="140" fill="#00ffc8" opacity=".05"/>
+  <text x="140" y="190" fill="#00ffc8" font-family="monospace" font-size="14" opacity=".7">0x4F 0x2A 0x91</text>
+  <text x="140" y="220" fill="#ff3344" font-family="monospace" font-size="14" opacity=".7">MALWARE.BIN</text>
+  <rect x="420" y="100" width="280" height="280" fill="none" stroke="#00ffc8" stroke-width="1" opacity=".4"/>
+  <circle cx="560" cy="240" r="60" fill="none" stroke="#00ffc8" stroke-dasharray="4 4" opacity=".5"/>
+  <rect x="520" y="200" width="80" height="80" fill="none" stroke="#ff3344" stroke-width="2" opacity=".5"/>
+  <text x="50" y="460" fill="#00ffc8" font-family="monospace" font-size="18" letter-spacing="3">FORENSICS LAB</text>
+</svg>
